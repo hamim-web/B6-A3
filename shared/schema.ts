@@ -18,11 +18,12 @@ export const users = pgTable("users", {
 export const vehicles = pgTable("vehicles", {
   id: serial("id").primaryKey(),
   vehicleName: text("vehicle_name").notNull(),
-  type: text("type", { enum: ["car", "bike", "van", "SUV"] }).notNull(),
+  type: text("type", { enum: ["car", "bike", "truck"] }).notNull(),
+  model: text("model").notNull(),
   registrationNumber: text("registration_number").notNull().unique(),
   imageUrl: text("image_url"),
   dailyRentPrice: integer("daily_rent_price").notNull(),
-  availabilityStatus: text("availability_status", { enum: ["available", "booked"] }).notNull().default("available"),
+  availabilityStatus: text("availability_status", { enum: ["available", "rented", "maintenance"] }).notNull().default("available"),
   createdAt: timestamp("created_at").defaultNow(),
 });
 
@@ -33,7 +34,7 @@ export const bookings = pgTable("bookings", {
   rentStartDate: date("rent_start_date").notNull(),
   rentEndDate: date("rent_end_date").notNull(),
   totalPrice: integer("total_price").notNull(),
-  status: text("status", { enum: ["active", "cancelled", "returned"] }).notNull().default("active"),
+  status: text("status", { enum: ["pending", "confirmed", "completed", "cancelled"] }).notNull().default("pending"),
   createdAt: timestamp("created_at").defaultNow(),
 });
 

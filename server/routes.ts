@@ -2,7 +2,7 @@ import type { Express, Request, Response, NextFunction } from "express";
 import { createServer, type Server } from "http";
 import { storage } from "./storage";
 import { api } from "@shared/routes";
-import { z } from "zod";
+import { z, ZodError } from "zod";
 import { verifyToken } from "./auth/auth.service"; // Import verifyToken
 import { authRoutes } from "./auth/auth.routes"; // Import authRoutes
 import bcrypt from "bcryptjs";
@@ -86,6 +86,9 @@ export async function registerRoutes(httpServer: Server, app: Express): Promise<
           const vehicle = await storage.createVehicle(input);
           res.status(201).json({ success: true, message: "Vehicle created successfully", data: vehicle });
       } catch (error) {
+          if (error instanceof ZodError) {
+            return res.status(400).json({ success: false, message: "Validation failed", errors: error.errors });
+          }
           if (error.code === 'SQLITE_CONSTRAINT' && error.message.includes('UNIQUE constraint failed: vehicles.registrationNumber')) {
               return res.status(409).json({ success: false, message: "Vehicle with this registration number already exists" });
           }
@@ -238,6 +241,7 @@ export async function registerRoutes(httpServer: Server, app: Express): Promise<
       await storage.createVehicle({
           vehicleName: "Toyota Camry 2024",
           type: "car",
+          model: "Sedan",
           registrationNumber: "ABC-1234",
           dailyRentPrice: 50,
           availabilityStatus: "available"
@@ -245,6 +249,7 @@ export async function registerRoutes(httpServer: Server, app: Express): Promise<
        await storage.createVehicle({
           vehicleName: "Honda Civic 2023",
           type: "car",
+          model: "Coupe",
           registrationNumber: "XYZ-5678",
           dailyRentPrice: 45,
           availabilityStatus: "available"
