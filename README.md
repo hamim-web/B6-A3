@@ -111,18 +111,3 @@ GROUP BY
 HAVING
     COUNT(b.booking_id) > 2;
 ```
-
-## Part 3: Viva Video
-
-For the viva, you will need to record a video explaining the project. You can upload the video to YouTube or Google Drive and share the public link here.
-
-**In your video, you should cover the following points:**
-
--   A brief overview of the project.
--   An explanation of the ERD and the relationships between the tables.
--   A demonstration of the SQL queries and the results they produce.
--   An explanation of the concepts used in the SQL queries.
-
----
-
-*This repository was prepared to fulfill the requirements of the Database Design & SQL Queries assignment.*
